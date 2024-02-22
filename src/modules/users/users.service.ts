@@ -18,10 +18,16 @@ export class UsersService {
   }
 
   async findAll(page: number, limit: number): Promise<User[]> {
-    return await this.userRepository.findAll<User>({
+    const users = await this.userRepository.findAll<User>({
+      attributes: { exclude: ['password'] },
       offset: (page - 1) * limit,
       limit: limit,
     });
+    // Remove password before sending
+    users.forEach((user) => {
+      delete user.password;
+    });
+    return users;
   }
 
   async findOneById(id: number): Promise<User> {
