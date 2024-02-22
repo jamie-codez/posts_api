@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserDto } from '../users/dto/user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { LoginDto } from './dto/login.dto';
+import { DoesUserExistGuard } from '../../core/doesUserExist.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -16,6 +17,7 @@ export class AuthController {
     return this.authService.login(login);
   }
 
+  @UseGuards(DoesUserExistGuard)
   @Post('register')
   async register(@Body() user: UserDto) {
     return this.authService.create(user);
