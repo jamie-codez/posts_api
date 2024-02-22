@@ -35,7 +35,11 @@ export class AuthService {
   }
 
   public async login(user): Promise<any> {
-    const { password, ...result } = user;
+    const localUser = await this.usersService.findOneByEmail(user.email);
+    if (!localUser) {
+      throw new Error('User not found');
+    }
+    const { password, ...result } = localUser['dataValues'];
     // Generate JWT
     const token = await this.jwtService.signAsync(result);
     return { ...result, token };

@@ -3,16 +3,17 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { UserDto } from '../users/dto/user.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { LoginDto } from './dto/login.dto';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @UseGuards(AuthGuard('local'))
+  // @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Request() req: any) {
-    return this.authService.login(req.user);
+  async login(@Body() login: LoginDto) {
+    return this.authService.login(login);
   }
 
   @Post('register')
